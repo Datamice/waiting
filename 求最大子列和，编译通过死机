@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+int Maxsum(int *prt,int len){
+	int max=0;
+	int b[10000];
+	int sum;
+	int judge=0;
+	for(int i=0;i<len;i++)
+	{
+		sum=0;
+		for(;prt+i<=prt+len;)
+		{
+			sum+=*prt;
+			prt++;
+			if(sum>max)
+				max=sum;
+		}
+		
+		if(max<0){
+			max=0;
+		}
+		
+	}
+	return max;
+}
+
+
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	int a[n];
+	int *prt=a;
+	
+	int num=0;
+	for(int i=0;i<n;i++)
+	    scanf("%d",prt++);
+
+	prt=a;
+			
+	int r=Maxsum(prt,n);
+	printf("\n");
+	printf("%d",r);
+	
+	return 0;
+}
