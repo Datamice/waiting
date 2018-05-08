@@ -37,48 +37,111 @@ int main()
 
 
 //用链表实现两个多项式想加
-
-
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
 typedef struct Node* List;
 typedef struct Node{
     int coef;
     int value;
     List Next;
 }Node;
-
-
+//初始化不需要任何参数，返回指针，在主函数里用另一个指针指向就好了，这次初始化用的是尾插法，回头可以改下头插法，因为两种方法可以实现正序和逆序
 List MakeEmptyAndInitial(){
-    List L;
-    L=(List)malloc(sizeof(Node));
-    if(L = NULL)
-        {
-            printf("内存空间不足");
-        }
-     L->Next = NULL;
+    /*下面的判断语句是对头结点申请并初妈化*/
+    List L;//定义头结点
+    L=(List)malloc(sizeof(Node));//malloc前面括号就是头结点L的类型，sizeof括号是指向的数据类型
+    if(L == NULL)//记得永远不能用单个等号，那个是赋值号
+        printf("内存空间不足");
+    else
+        L->Next = NULL;
+
     int coef,value;
-
-
-
-    List r=L;
-    while(scanf("%d %d",&coef,&value) != EOF) {
-            List p=(List*)malloc(sizeof(Node));
+    List r=L;//申请头结点位置，尾插法，用来移动做其他操作
+     /*下面语句是读入数值并按*/
+    while(scanf("%d %d",&coef,&value) != EOF)// 输入结束按ctrl+z结束输入
+    {
+            List p=(List)malloc(sizeof(Node));
             p->coef=coef;
             p->value=value;
+            printf("%d %d \n",coef,value);
+            r->Next=p;//这里是用空头结点的指针指向P， 不能直接用r,就变成r指向了P，没有和之前L头结点联系起来，如果直接用L也行，但后面继续连接其他新结点就很麻烦，不断用L.Next.Next,还不能直接移动L
+            r=p;//这里的P什么时候释放好？测试时候如果直接在下面一释放，就发现结果错误了
+    }
+    r->Next=NULL;//此时r在最后一个结点，设置其指针Next为0值。
+    return L;
+}
+List Pinjie(List L1,List L2)
+{
+    List L3;//定义头结点
+    L3=(List)malloc(sizeof(Node));//malloc前面括号就是头结点L的类型，sizeof括号是指向的数据类型
+    if(L3 == NULL)//记得永远不能用单个等号，那个是赋值号
+        printf("内存空间不足");
+    else
+        L3->Next = NULL;
+
+    List tem1=L1->Next;
+    List tem2=L2->Next;
+    List r=L3->Next;
+    while(tem1&&tem2){
+        if((tem1->coef)<(tem2->coef)){
+            List p=(List)malloc(sizeof(Node));
+            p->coef=tem1->coef;
+            p->value=tem1->value;
+            r->Next=p;
+            r=p;
+        }
+        if((tem1->coef)>(tem2->coef)){
+            List p=(List)malloc(sizeof(Node));
+            p->coef=tem2->coef;
+            p->value=tem2->value;
             r->Next=p;
             r=p;
     }
-    r->Next=NULL;
-    return L;
+    }
+
+    if(tem1==NULL)
+        while(tem2)
+        {
+            r=tem2;
+            r=r->Next;
+            tem2=tem2->Next;
+        }
+
+    if(tem2==NULL)
+        while(tem1)
+        {
+            r=tem1;
+            r=r->Next;
+            tem1=tem1->Next;
+        }
+
+    return L3;
+
 }
 
 int main(){
     List L1=MakeEmptyAndInitial();
-    for(;L1->Next;L1->Next++)
-        printf("%d %d",L1->coef,L1->value);
+    List L2=MakeEmptyAndInitial();
+    List tem1=L1->Next;
+    List tem2=L2->Next;
 
+    while(tem1){
+        printf("%d %d ",tem1->coef,tem1->value);
+        tem1=tem1->Next;
+    }
+
+    while(tem2){
+        printf("%d %d ",tem2->coef,tem2->value);
+        tem2=tem2->Next;
+    }
+
+    List L3=Pinjie(L1,L2);
+    List tem3=L3->Next;
+
+    while(tem3){
+        printf("%d %d ",tem3->coef,tem3->value);
+        tem3=tem3->Next;
+    }
     return 0;
-
 }
-//
