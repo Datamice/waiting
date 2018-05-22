@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define Maxsize 1000
+//二叉树表示
+struct Node{
+    char x;
+    int left;
+    int right;
+}T1[Maxsize],T2[Maxsize];
+
+
+
+//建二叉树
+int Treebuild(struct Node T[])
+{   int Root=-1;
+    int N;
+    char left,right;
+    scanf("%d",&N);
+    int check[N];
+    if(N>0)
+    {   for(int i=0;i<N;i++) check[i]=0;
+        for(int i=0;i<N;i++)
+        {
+            scanf("%c %c %c",&T[i].x,&left,&right);
+            if(left!='-')
+                {
+                    T[i].left=left-'0';
+                    check[T[i].left]=1;}else{T[i].left=-1;}
+            if(right!='-'){T[i].right=left-'0'; check[T[i].right]=1;}else{T[i].right=-1;}
+        }
+
+        for(int i=0;i<N;i++){
+            if(check[i]==0)
+                {Root=i;
+                break;}
+        }
+        return Root;
+    }
+}
+
+//同构判别
+int Isthesame(int R1, int R2)
+{
+    if((R1==-1)&&(R2==-1)) return 1;
+    if((R2!=-1&&R1==-1)||(R2==-1&&R1!=-1)) return 0;
+    if(T1[R1].x!=T2[R2].x) return 0;
+    if((T1[R1].left==-1)&&(T2[R2].left==-1))
+        return Isthesame(T1[R1].right,T2[R2].right);
+    if((T1[R1].right==-1)&&(T2[R2].right==-1))
+        return Isthesame(T1[R1].left,T2[R2].left);
+    if((T1[R1].left!=-1)&&(T2[R2].left!=-1)&&((T1[T1[R1].left].x)==(T1[T1[R1].left].x))){
+        return (Isthesame(T1[R1].left,T2[R2].left)&&Isthesame(T1[R1].right,T2[R2].right));}else{return (Isthesame(T1[R1].left,T2[R2]right)&&Isthesame(T1[R1].left,T2[R2].right));}
+
+    return 0;
+}
+
+//main function
+int main()
+{
+    int R1=Treebuild(T1);
+    int R2=Treebuild(T2);
+    if(Isthesame(R1,R2)){printf("YES");}else{printf("No");}
+    return 0;
+}
+
+
+
+
+
+
+
+
